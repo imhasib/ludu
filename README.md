@@ -27,11 +27,29 @@
 * API docs:
 
         http://localhost:8080/v3/api-docs
+* Create a new player:
+
+      POST http://localhost:8080/api/players
+
+* Start game:
+
+      POST http://localhost:8080/api/start
+
+* Retrieve current scores:
+
+      GET http://localhost:8080/api/score
 
 
 ### How to run the application with Docker
+* Dockerfile is located in the root folder.
+* To create an image from Dockerfile, we have to run ‘docker build' like before:
 
-Details should be described in "/docker/README.md" file with the required docker files.
+      docker build --tag=ludu:latest .
+
+* To run the container from the image:
+
+      docker run -p 8080:8080 ludu
+
 
 ### Rules of the game:
 

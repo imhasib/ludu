@@ -21,6 +21,7 @@ public class ApiController {
 	@Autowired
 	private GameService gameService;
 
+	// Create a new player:
 	@PostMapping("/players")
 	public Player createPlayer(@Valid @RequestBody Player player) {
 		if(playerService.getPlayers().size() < Constants.MAX_PLAYER) {
@@ -28,6 +29,8 @@ public class ApiController {
 		}
 		return player;
 	}
+
+
 	@GetMapping("/players")
 	public List<Player> getAllPlayers() {
 		return playerService.getPlayers();
@@ -38,6 +41,7 @@ public class ApiController {
 		return playerService.addAutoPlayers();
 	}
 
+	// Start game:
 	@PostMapping("/start")
 	public String startGame() {
 		if(playerService.getPlayers().size() >= Constants.MIN_PLAYER) {
@@ -48,17 +52,22 @@ public class ApiController {
 		}
 	}
 
+	// Retrieve current scores:
 	@GetMapping("/score")
 	public String currentScore() {
 		String allPlayersScore = "";
 
-		for(Player player: playerService.getPlayers()) {
-			allPlayersScore.concat(player.getName());
-			allPlayersScore.concat(" : " + player.getScore() + " | ");
-		}
+		if(!gameService.isGameRunning()) {
+			allPlayersScore = "There is no ongoing game.";
+		} else {
+			for(int i=0; i<playerService.getPlayers().size(); i++) {
+				Player player = playerService.getPlayers().get(i);
+				allPlayersScore += "Player name:”"+player.getName() + "”, Score:”" + player.getScore() + "”";
 
-		if(playerService.getPlayers().isEmpty()) {
-			allPlayersScore = "There are no players. please add some player.";
+				if(i != playerService.getPlayers().size()-1) {
+					allPlayersScore += " | ";
+				}
+			}
 		}
 
 		return allPlayersScore;
